@@ -3,46 +3,38 @@ const con = document.querySelector("#container");
 let comparingArray = editItem;
 let orderItemID;
 
-const pushOrderItem = (item) => {
-    orderItems.push({
-        itemID: orderItems.length,
-        id: item.id,
-        itemName: item.itemName,
-        desc: item.desc,
-        price: item.price,
-        toppings: item.toppings
-    });
-}
+import { pushOrderItem, removeToppingFromItem } from './functions/data-functions.js';
 
-const removeToppingFromItem = (id) => {
-    const ariaContainer = document.querySelector("#toppingCon");
-    const toppingIndex = editItem.findIndex((topping) => {
-        return topping.id === id;
+const getItem = (item) => {
+    const cartList = document.querySelector("#cartList");
+    con.removeChild(cartList);
+    orderItemID = item.itemID;
+    item.toppings.forEach((topping) => {
+        editItem.push(topping);
     });
-    if (toppingIndex > -1) {
-        editItem.splice(toppingIndex, 1);
-    }
-    con.removeChild(ariaContainer);
     renderToppings(editItem);
 }
 
-const renderToppings = (editItem) => {
+export const renderToppings = (editItem) => {
     const toppingCon = document.createElement("div");
     const addTopping = document.createElement("button");
     const confirmTopping = document.createElement("button");
-    confirmTopping.textContent = "Confirm";
     let toppingChoice = extraToppings[0].toppingName;
 
-    toppingCon.setAttribute("id", "toppingCon");
     addTopping.textContent = "Add Topping";
+    confirmTopping.textContent = "Confirm";
+    toppingCon.setAttribute("id", "toppingCon");
 
     con.appendChild(toppingCon);
+
     editItem.forEach((topping) => {
         const toppingText = document.createElement("small");
         const removeToppingButton = document.createElement("button");
         const br = document.createElement("br");
+
         toppingText.textContent = topping.topping;
         removeToppingButton.textContent = "Remove";
+        
         toppingCon.appendChild(toppingText);
         toppingCon.appendChild(removeToppingButton);
         toppingCon.appendChild(br);
@@ -100,16 +92,6 @@ const renderToppings = (editItem) => {
     if (editItem !== comparingArray) {
         toppingCon.appendChild(confirmTopping);
     }
-}
-
-const getItem = (item) => {
-    const cartList = document.querySelector("#cartList");
-    con.removeChild(cartList);
-    orderItemID = item.itemID;
-    item.toppings.forEach((topping) => {
-        editItem.push(topping);
-    });
-    renderToppings(editItem);
 }
 
 const renderCartIcon = (orderItems) => {
