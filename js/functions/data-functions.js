@@ -17,14 +17,16 @@ export const pushOrderItem = (item) => {
 }
 
 export const removeToppingFromItem = (id) => {
-    const ariaContainer = document.querySelector("#toppingCon");
+    const ariaContainer = document.querySelector("#allToppingCon");
     const toppingIndex = editItem.findIndex((topping) => {
         return topping.id === id;
     });
     if (toppingIndex > -1) {
         editItem.splice(toppingIndex, 1);
     }
+    con.removeChild(document.querySelector(".headerText"));
     con.removeChild(ariaContainer);
+    con.removeChild(toppingButtonContainer);
     renderToppings(editItem);
 }
 

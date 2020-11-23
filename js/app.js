@@ -6,8 +6,6 @@ let orderItemID;
 import { pushOrderItem, removeToppingFromItem } from './functions/data-functions.js';
 
 const getItem = (item) => {
-    const cartList = document.querySelector("#cartList");
-    con.removeChild(cartList);
     orderItemID = item.itemID;
     item.toppings.forEach((topping) => {
         editItem.push(topping);
@@ -16,28 +14,42 @@ const getItem = (item) => {
 }
 
 export const renderToppings = (editItem) => {
-    const toppingCon = document.createElement("div");
+    const toppingHeaderText = document.createElement("h1");
+    const allToppingCon = document.createElement("div");
+    const toppingButtonContainer = document.createElement("div");
     const addTopping = document.createElement("button");
     const confirmTopping = document.createElement("button");
     let toppingChoice = extraToppings[0].toppingName;
 
+    toppingHeaderText.textContent = "Edit Item";
     addTopping.textContent = "Add Topping";
     confirmTopping.textContent = "Confirm";
-    toppingCon.setAttribute("id", "toppingCon");
 
-    con.appendChild(toppingCon);
+    allToppingCon.setAttribute("id", "allToppingCon");
+    allToppingCon.setAttribute("class", "row");
+    toppingHeaderText.setAttribute("class", "headerText");
+    toppingButtonContainer.setAttribute("id", "toppingButtonContainer");
+    addTopping.setAttribute("class", "btn btn-primary addToppingButton");
+    confirmTopping.setAttribute("class", "btn btn-success confirmToppingButton");
+
+    con.appendChild(toppingHeaderText);
+    con.appendChild(allToppingCon);
+    con.appendChild(toppingButtonContainer);
 
     editItem.forEach((topping) => {
-        const toppingText = document.createElement("small");
-        const removeToppingButton = document.createElement("button");
-        const br = document.createElement("br");
+        const toppingCon = document.createElement("div");
+        const toppingText = document.createElement("span");
+        const removeToppingButton = document.createElement("div");
 
         toppingText.textContent = topping.topping;
-        removeToppingButton.textContent = "Remove";
+        removeToppingButton.textContent = "X";
+
+        toppingCon.setAttribute("class", "col-xs-12 col-sm-6 col-md-3 toppingCon");
+        removeToppingButton.setAttribute("class", "removeToppingButton");
         
+        allToppingCon.appendChild(toppingCon);
         toppingCon.appendChild(toppingText);
         toppingCon.appendChild(removeToppingButton);
-        toppingCon.appendChild(br);
 
         removeToppingButton.addEventListener("click", (e) => {
             removeToppingFromItem(topping.id);
@@ -50,25 +62,34 @@ export const renderToppings = (editItem) => {
             orderItems[orderItemID].toppings.push(topping);
         });
         editItem = [];
-        con.removeChild(toppingCon);
+        con.removeChild(toppingHeaderText);
+        con.removeChild(allToppingCon);
+        con.removeChild(toppingButtonContainer);
         renderCart(orderItems);
     });
+
     addTopping.addEventListener("click", (e) => {
         const selectTopping = document.createElement("select");
         const confirmAddTopping = document.createElement("button");
+
         selectTopping.textContent = "Select A Topping...";
         confirmAddTopping.textContent = "Add";
+
+        selectTopping.setAttribute("class", "form-control");
+        confirmAddTopping.setAttribute("class", "btn btn-success confirmAddToppingButton");
+
         con.appendChild(selectTopping);
         con.appendChild(confirmAddTopping);
+
         extraToppings.forEach((topping) => {
             const toppingItem = document.createElement("option");
             toppingItem.textContent = topping.toppingName;
             selectTopping.appendChild(toppingItem);
         });
+
         confirmAddTopping.addEventListener("click", (e) => {    
             // Validates if item is present in topping array,
             // then pushes to current topping array
-            console.log(editItem);
             extraToppings.forEach((topping) => {
                 if (toppingChoice == topping.toppingName) {
                     editItem.push({
@@ -77,27 +98,30 @@ export const renderToppings = (editItem) => {
                     });
                 }
             });
-            con.removeChild(toppingCon);
+            con.removeChild(allToppingCon);
+            con.removeChild(toppingHeaderText);
+            con.removeChild(toppingButtonContainer);
             con.removeChild(selectTopping);
             con.removeChild(confirmAddTopping);
             renderToppings(editItem);
         });
+
         selectTopping.addEventListener("change", (e) => {
             toppingChoice = e.target.value;
         });
     });
-    toppingCon.appendChild(addTopping);
-    console.log("comparingArray: ", comparingArray);
-    console.log("editItem: ", editItem);
+
+    toppingButtonContainer.appendChild(addTopping);
+
     if (editItem !== comparingArray) {
-        toppingCon.appendChild(confirmTopping);
+        toppingButtonContainer.appendChild(confirmTopping);
     }
 }
 
 const renderCartIcon = (orderItems) => {
-    const cartButton = document.querySelector("#checkout");
-    cartButton.textContent = orderItems.length + " Cart";
-    console.log("clicked");
+    const cartButton = document.querySelector("#cartArea img");
+    cartButton.removeAttribute("src");
+    cartButton.setAttribute("src", "img/icon/shopping-cart-valid.png");
 }
 
 const confirmOrder = (orderItems) => {
@@ -120,82 +144,137 @@ const confirmOrder = (orderItems) => {
 }
 
 const renderItems = (foodItems) => {
-    const foodList = document.createElement("ul");
+    const foodList = document.createElement("div");
+    foodList.setAttribute("class", "row");
     foodList.setAttribute("id", "foodItems");
     con.appendChild(foodList);
-    const appTitle = document.createElement("h1");
-    appTitle.textContent = "Food Order App";
-    foodList.appendChild(appTitle);
     foodItems.forEach((item) => {
-        const itemRender = document.createElement("p");
-        const toppingList = document.createElement("div");
+        const itemImg = document.createElement("div");
+        const itemRenderCon = document.createElement("div");
+        const itemRenderName = document.createElement("span");
+        const itemRenderPrice = document.createElement("span");
         const addItem = document.createElement("button");
-        itemRender.textContent = item.itemName + " - $" + item.price;
+        const containerColumn = document.createElement("div");
+        const br = document.createElement("br");
+        itemImg.setAttribute("class", "itemImg");
+        itemImg.setAttribute("style", 
+            `background-image: url("${item.itemImgURL}"); height: 300px; background-position: center; background-repeat: no-repeat; background-size: cover;`
+        );
+        // console.log(item.itemImgURL);
+        itemRenderCon.setAttribute("class", "itemTextCon");
+        itemRenderName.setAttribute("class", "itemNameText");
+        itemRenderPrice.setAttribute("class", "itemPriceText");
+        addItem.setAttribute("class", "btn btn-success addItemButton");
+        containerColumn.setAttribute("class", "col-xs-12 col-sm-6 col-md-4 itemContainer");
+        foodList.appendChild(containerColumn);
+        itemRenderName.textContent = item.itemName;
+        itemRenderPrice.textContent = "$" + item.price;
         addItem.textContent = "Add Item";
-        toppingList.setAttribute("class", "topping-list");
 
         addItem.addEventListener("click", () => {
+            gsap.to(itemRenderName, {duration: .05, ease: "none", color: "#28a745"});
+            gsap.to(itemRenderPrice, {duration: .05, ease: "none", color: "#28a745"});
+            gsap.to(itemRenderName, {delay: .05, duration: 2, ease: "none", color: "black"});
+            gsap.to(itemRenderPrice, {delay: .05, duration: 2, ease: "none", color: "black"});
             pushOrderItem(item);
             renderCartIcon(orderItems);
         });
 
-        foodList.appendChild(itemRender);
-        foodList.appendChild(toppingList);
-        foodList.appendChild(addItem);
+        addItem.addEventListener("mouseover", () => {
+            gsap.to(itemImg, {duration: .3, ease: "ease.out", opacity: .85});
+        });
+
+        addItem.addEventListener("mouseout", () => {
+            gsap.to(itemImg, {duration: .3, ease: "ease.out", opacity: 1});
+        });
+
+        containerColumn.appendChild(itemImg);
+        containerColumn.appendChild(itemRenderCon);
+        itemRenderCon.appendChild(itemRenderName);
+        itemRenderCon.appendChild(itemRenderPrice);
+        containerColumn.appendChild(addItem);
     });
 
-    const checkoutButton = document.createElement("button");
-    checkoutButton.textContent = "Cart";
-    checkoutButton.setAttribute("id", "checkout");
-    con.appendChild(checkoutButton);
-    if (orderItems.length > 0) {
-        checkoutButton.textContent = orderItems.length + " Cart";
-    }
-    document.querySelector("#checkout").addEventListener("click", (e) => {
+    const checkoutButton = document.querySelector("#cartArea");
+    const cartButton = document.querySelector("#cartArea img");
+
+    checkoutButton.addEventListener("click", (e) => {
         if (orderItems.length > 0) {
-            renderCart(orderItems);
-        } else {
-            const errorMsg = document.createElement("small");
-            errorMsg.setAttribute("id", "errorMsg");
-            const msgCheck = document.querySelector("#errorMsg");
-            errorMsg.textContent = "Please add items in order to checkout";
-            if (!msgCheck) {
-                con.append(br);
-                con.append(errorMsg);
+            const cartList = document.querySelector("#cartList");
+            if (!cartList) {
+                renderCart(orderItems);
             }
+        } else {
+            console.log("No items in cart");
+            // Do Greensock Animation here where the cart icon wiggles
+            gsap.to(cartButton, {duration: .1, ease: "ease.out", rotation: -20});
+            gsap.to(cartButton, {delay: .1, duration: .5, ease: "bounce.out", rotation: 0});
         }
+    });
+    checkoutButton.addEventListener("mouseover", (e) => {
+        gsap.to(cartButton, {duration: .3, ease: "ease.in", opacity: .7});
+    });
+    checkoutButton.addEventListener("mouseout", (e) => {
+        gsap.to(cartButton, {duration: .3, ease: "ease.in", opacity: 1});
     });
 }
 
 const renderCart = (orderItems) => {
     const cartList = document.createElement("div");
+    const cartItemColumn = document.createElement("div");
+    const totalCheckoutColumn = document.createElement("div");
     const cartText = document.createElement("h1");
     const foodList = document.querySelector("#foodItems");
     const checkoutButton = document.querySelector("#checkout");
     const errorMsg = document.querySelector("#errorMsg");
-    const renderTotal = document.createElement("p");
+    const renderTotal = document.createElement("h3");
     const finalizeOrderButton = document.createElement("button");
     const backButton = document.createElement("button");
     let totalCost = 0;
     editItem = [];
 
+    cartList.setAttribute("class", "row");
     cartList.setAttribute("id", "cartList");
+    cartItemColumn.setAttribute("class", "col-xs-12 col-md-6");
+    totalCheckoutColumn.setAttribute("class", "col-xs-12 col-md-6 finalizeOrderArea");
+    cartText.setAttribute("class", "headerText");
+    renderTotal.setAttribute("id", "totalCostText");
+    finalizeOrderButton.setAttribute("class", "btn btn-success finalizeOrderButton");
+    backButton.setAttribute("class", "btn btn-secondary backButton");
+
     cartText.textContent = "Cart";
     finalizeOrderButton.textContent = "Finalize Order";
     backButton.textContent = "Back";
 
+    con.appendChild(cartText);
     con.appendChild(cartList);
-    cartList.appendChild(cartText);
+    cartList.appendChild(cartItemColumn);
+    cartList.appendChild(totalCheckoutColumn);
     
     orderItems.forEach((item) => {
-        const orderItem = document.createElement("p");
+        const cartItem = document.createElement("div");
+        const orderItemName = document.createElement("span");
+        const orderItemPrice = document.createElement("span");
         const editItemButton = document.createElement("button");
-        orderItem.textContent = item.itemName + " - $" + item.price;
-        editItemButton.textContent = "Edit Item";
-        cartList.appendChild(orderItem);
-        cartList.appendChild(editItemButton);
+        const br = document.createElement("br");
 
-        editItemButton.addEventListener("click", (e) => {
+        cartItem.setAttribute("class", "cartItem");
+        editItemButton.setAttribute("class", "btn btn-success editItemButton");
+        orderItemPrice.setAttribute("class", "orderItemPrice");
+        orderItemName.textContent = item.itemName;
+        orderItemPrice.textContent = "$" + item.price;
+        editItemButton.textContent = "Edit Item";
+
+        cartItemColumn.appendChild(cartItem);
+        cartItem.appendChild(orderItemName);
+        cartItem.appendChild(editItemButton);
+        cartItem.appendChild(br);
+        cartItem.appendChild(orderItemPrice);
+
+        editItemButton.addEventListener("click", (e) => {     
+            con.removeChild(cartText);
+            con.removeChild(cartList);
+            con.removeChild(backButton);
             getItem(item);
         });
 
@@ -203,10 +282,15 @@ const renderCart = (orderItems) => {
     });
 
     finalizeOrderButton.addEventListener("click", (e) => {
+        con.removeChild(cartText);
+        con.removeChild(cartList);
+        con.removeChild(backButton);
         renderCheckout(orderItems);
     });
     backButton.addEventListener("click", (e) => {
+        con.removeChild(document.querySelector(".headerText"));
         con.removeChild(document.querySelector("#cartList"));
+        con.removeChild(document.querySelector(".backButton"));
         renderItems(foodItems);
     });
 
@@ -224,34 +308,37 @@ const renderCart = (orderItems) => {
     }
 
     renderTotal.textContent = `Total: $${totalCost}`;
-    cartList.appendChild(renderTotal);
-    cartList.appendChild(finalizeOrderButton);
-    cartList.appendChild(backButton);
+    cartList.appendChild(totalCheckoutColumn);
+    totalCheckoutColumn.appendChild(renderTotal);
+    totalCheckoutColumn.appendChild(finalizeOrderButton);
+    con.appendChild(backButton);
 
 }
 
 const checkCoupon = (couponValue, totalCost) => {
-    const checkoutList = document.querySelector("#checkoutList");
     const totalPriceText = document.querySelector("#totalPriceText");
     const couponCodeStatus = document.createElement("p");
+    const couponCodeCheckSummary = document.querySelector("#couponCodeStatus");
+
     couponCodeStatus.setAttribute("id", "couponCodeStatus");
+
     couponCodes.forEach((code) => {
         if (couponValue == code.couponName) {
             couponCodeStatus.textContent = "Coupon code successfully activated!";
-            if (!document.querySelector("#couponCodeStatus")) {
-                checkoutList.appendChild(couponCodeStatus);
+            if (!couponCodeCheckSummary) {
+                checkoutSummaryContainer.appendChild(couponCodeStatus);
             } else {
-                checkoutList.removeChild(document.querySelector("#couponCodeStatus"));
-                checkoutList.appendChild(couponCodeStatus);
+                checkoutSummaryContainer.removeChild(couponCodeCheckSummary);
+                checkoutSummaryContainer.appendChild(couponCodeStatus);
             }
             totalCost = totalCost - code.priceReduction;
         } else {
             couponCodeStatus.textContent = "Coupon code invalid";
-            if (!document.querySelector("#couponCodeStatus")) {
-                checkoutList.appendChild(couponCodeStatus);
+            if (!couponCodeCheckSummary) {
+                checkoutSummaryContainer.appendChild(couponCodeStatus);
             } else {
-                checkoutList.removeChild(document.querySelector("#couponCodeStatus"));
-                checkoutList.appendChild(couponCodeStatus);
+                checkoutSummaryContainer.removeChild(couponCodeCheckSummary);
+                checkoutSummaryContainer.appendChild(couponCodeStatus);
             }
         }
     });
@@ -261,52 +348,66 @@ const checkCoupon = (couponValue, totalCost) => {
 const renderCheckout = (orderItems) => {
     const checkoutList = document.createElement("div");
     const checkoutText = document.createElement("h1");
+
+    const checkoutSummaryContainer = document.createElement("div");
     const totalPriceText = document.createElement("h2");
     const couponForm = document.createElement("form");
     const couponInput = document.createElement("input");
     const couponSubmit = document.createElement("button");
-    const cartList = document.querySelector("#cartList");
     const confirmOrderButton = document.createElement("button");
     const backButton = document.createElement("button");
     let totalCost = 0;
 
-    checkoutList.setAttribute("id", "checkoutList");
-    totalPriceText.setAttribute("id", "totalPriceText");
-    couponInput.setAttribute("id", "couponInput");
     checkoutText.textContent = "Checkout";
     couponSubmit.textContent = "Submit Code";
     confirmOrderButton.textContent = "Place Order";
     backButton.textContent = "Back";
 
-    con.removeChild(cartList);
+    checkoutList.setAttribute("id", "checkoutList");
+    checkoutText.setAttribute("class", "headerText");
+    couponForm.setAttribute("id", "couponForm");
+    couponInput.setAttribute("class", "form-control");
+    couponSubmit.setAttribute("class", "btn btn-success couponSubmitButton");
+    checkoutSummaryContainer.setAttribute("id", "checkoutSummaryContainer");
+    totalPriceText.setAttribute("id", "totalPriceText");
+    confirmOrderButton.setAttribute("class", "btn btn-success");
+    confirmOrderButton.setAttribute("id", "placeOrderButton");
+    backButton.setAttribute("class", "btn btn-secondary");
+    couponInput.setAttribute("id", "couponInput");
 
+    con.appendChild(checkoutText);
     con.appendChild(checkoutList);
-    checkoutList.appendChild(checkoutText);
+    con.appendChild(checkoutSummaryContainer);
 
     orderItems.forEach((item) => {
+        const checkoutListItem = document.createElement("div");
         const itemNameText = document.createElement("h3");
         const itemPriceText = document.createElement("h4");
+
         itemNameText.textContent = item.itemName;
         itemPriceText.textContent = item.price;
-        checkoutList.appendChild(itemNameText);
-        checkoutList.appendChild(itemPriceText);
+
+        checkoutListItem.setAttribute("class", "checkoutListItem");
+
+        checkoutList.appendChild(checkoutListItem);
+        checkoutListItem.appendChild(itemNameText);
+        checkoutListItem.appendChild(itemPriceText);
+
         item.toppings.forEach((topping) => {
             const itemToppingText = document.createElement("small");
             itemToppingText.textContent = topping.topping + ", ";
-            checkoutList.appendChild(itemToppingText);
+            checkoutListItem.appendChild(itemToppingText);
         });
         totalCost = totalCost + item.price;
     });
     totalPriceText.textContent = "Total: $" + totalCost;
 
-    checkoutList.appendChild(br);
-    checkoutList.appendChild(br);
-    checkoutList.appendChild(couponForm);
+    checkoutSummaryContainer.appendChild(couponForm);
     couponForm.appendChild(couponInput);
     couponForm.appendChild(couponSubmit);
-    checkoutList.appendChild(totalPriceText);
-    checkoutList.appendChild(confirmOrderButton);
-    checkoutList.appendChild(backButton);
+    checkoutSummaryContainer.appendChild(totalPriceText);
+    checkoutSummaryContainer.appendChild(confirmOrderButton);
+    checkoutSummaryContainer.appendChild(backButton);
 
     couponForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -315,11 +416,16 @@ const renderCheckout = (orderItems) => {
     });
 
     backButton.addEventListener("click", (e) => {
+        con.removeChild(checkoutText);
         con.removeChild(checkoutList);
+        con.removeChild(checkoutSummaryContainer);
         renderCart(orderItems);
     });
 
     confirmOrderButton.addEventListener("click", (e) => {
+        con.removeChild(checkoutText);
+        // con.removeChild(errorMsg);
+        con.removeChild(checkoutSummaryContainer);
         confirmOrder(orderItems);
     });
 }

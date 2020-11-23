@@ -1,3 +1,221 @@
+html {
+  overflow-x: hidden;
+}
+
+header {
+  position: fixed;
+  z-index: 999;
+  background-color: #00771f;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.addItemButton {
+  width: 100%;
+  font-weight: 700;
+}
+
+.addItemButton:hover {
+  background-color: #179634;
+}
+
+.addItemButton:focus {
+  box-shadow: none;
+  background-color: #28a745;
+  border: 1px solid #28a745;
+}
+
+.addItemButton:focus:hover {
+  background-color: #179634;
+}
+
+#allToppingCon {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.backButton {
+  margin-top: 20px;
+}
+
+#cartArea,
+#logoArea {
+  cursor: pointer;
+  user-select: none;
+}
+
+.cartItem {
+  margin-top: 10px;
+}
+
+#cartList {
+  background-color: #dfdfdf;
+  display: flex;
+  align-items: flex-end;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+.checkoutListItem {
+  padding-bottom: 2em;
+}
+
+#couponForm {
+  display: flex;
+  margin-bottom: 1em;
+}
+
+#couponInput {
+  max-width: 400px;
+}
+
+.couponSubmitButton {
+  margin-top: 20px;
+  margin: 0 auto;
+  width: 130px;
+  min-width: 130px;
+  margin-left: 1em;
+}
+
+.editItemButton {
+  float: right;
+}
+
+.headerText {
+  font-weight: 900;
+  font-size: 3.5em;
+  font-family: "Roboto", sans-serif;
+}
+
+#checkoutList {
+  background-color: #dfdfdf;
+  padding: 30px;
+  padding-bottom: 0;
+  margin-bottom: 30px;
+}
+
+#container {
+  padding: 20px;
+  padding-top: 6.5em;
+}
+
 #foodItems {
   padding: 0;
+}
+
+.finalizeOrderArea {
+  bottom: 0;
+}
+
+.finalizeOrderButton {
+  width: 100%;
+}
+
+.itemContainer {
+  margin-bottom: 20px;
+}
+
+.itemText {
+  width: 100%;
+  font-size: 1.25em;
+  font-family: "Roboto", sans-serif;
+}
+
+.itemNameText {
+  font-weight: 400;
+  text-rendering: optimizeSpeed;
+  float: left;
+  user-select: none;
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+
+.itemPriceText {
+  font-weight: 700;
+  text-rendering: optimizeSpeed;
+  float: right;
+  user-select: none;
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+
+.itemTextCon {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+#orderButton {
+  color: white;
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+  padding: 20px;
+  font-size: 1.5em;
+}
+
+.orderItemPrice {
+  font-weight: 700;
+}
+
+#placeOrderButton {
+  margin-right: 0.75em;
+}
+
+.removeToppingButton {
+  background-color: grey;
+  color: white;
+  text-align: center;
+  font-weight: 900;
+  cursor: pointer;
+  margin-left: 10px;
+  padding: 5px;
+  width: 35px;
+  height: 35px;
+  border-radius: 20px;
+}
+
+#splash {
+  background-image: url("../img/splash-bg.jpg");
+  height: auto;
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  display: flex;
+  align-items: center;
+}
+
+#splash h2 {
+  color: white;
+  width: 100%;
+  text-align: center;
+  font-size: 6em;
+  text-transform: uppercase;
+}
+
+#splashCTA {
+  margin: 0 auto;
+}
+
+#totalCostText {
+  text-align: center;
+}
+
+#totalPriceText {
+  margin-bottom: 0.5em;
+}
+
+.toppingCon {
+  display: flex;
+  align-items: center;
+  margin: 10px;
+}
+
+.toppingCon span {
+  font-size: 1em;
+  font-family: "Roboto", sans-serif;
 }
