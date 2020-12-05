@@ -67,6 +67,6 @@ const couponCodes = [{
     priceReduction: 5,
 }];
 
-let orderItems = [];
-let editItem = [];
-let orderQueue = [];
+let orderItems = Array();
+let editItem = Array();
+let orderQueue = Array();

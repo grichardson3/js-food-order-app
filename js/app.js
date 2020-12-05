@@ -44,7 +44,7 @@ export const renderToppings = (editItem) => {
         toppingText.textContent = topping.topping;
         removeToppingButton.textContent = "X";
 
-        toppingCon.setAttribute("class", "col-xs-12 col-sm-6 col-md-3 toppingCon");
+        toppingCon.setAttribute("class", "col-xs-12 col-sm-6 col-md-3 col-lg-2 toppingCon");
         removeToppingButton.setAttribute("class", "removeToppingButton");
         
         allToppingCon.appendChild(toppingCon);
@@ -91,7 +91,7 @@ export const renderToppings = (editItem) => {
             // Validates if item is present in topping array,
             // then pushes to current topping array
             extraToppings.forEach((topping) => {
-                if (toppingChoice == topping.toppingName) {
+                if (toppingChoice === topping.toppingName) {
                     editItem.push({
                         id: editItem.length,
                         topping: topping.toppingName
@@ -118,7 +118,7 @@ export const renderToppings = (editItem) => {
     }
 }
 
-const renderCartIcon = (orderItems) => {
+const renderCartIcon = () => {
     const cartButton = document.querySelector("#cartArea img");
     cartButton.removeAttribute("src");
     cartButton.setAttribute("src", "img/icon/shopping-cart-valid.png");
@@ -306,6 +306,20 @@ const renderCart = (orderItems) => {
     if (foodList) {
         document.querySelector("#container").removeChild(foodList);
     }
+    if (document.querySelector('#checkoutList')) {
+        document.querySelector("#container").removeChild(document.querySelector('#checkoutList'));
+        document.querySelector("#container").removeChild(document.querySelector('#checkoutSummaryContainer'));
+        document.querySelector("#container").removeChild(document.querySelector('.headerText'));
+    }
+    if (document.querySelector("#allToppingCon")) {
+        document.querySelector('#container').removeChild(document.querySelector('.headerText'));
+        document.querySelector('#container').removeChild(document.querySelector('#allToppingCon'));
+        document.querySelector('#container').removeChild(document.querySelector('#toppingButtonContainer'));
+        if (document.querySelector('.confirmAddToppingButton')) {
+            document.querySelector('#container').removeChild(document.querySelector('.form-control'));
+            document.querySelector('#container').removeChild(document.querySelector('.confirmAddToppingButton'));
+        }
+    }
 
     renderTotal.textContent = `Total: $${totalCost}`;
     cartList.appendChild(totalCheckoutColumn);
@@ -323,7 +337,7 @@ const checkCoupon = (couponValue, totalCost) => {
     couponCodeStatus.setAttribute("id", "couponCodeStatus");
 
     couponCodes.forEach((code) => {
-        if (couponValue == code.couponName) {
+        if (couponValue === code.couponName) {
             couponCodeStatus.textContent = "Coupon code successfully activated!";
             if (!couponCodeCheckSummary) {
                 checkoutSummaryContainer.appendChild(couponCodeStatus);
